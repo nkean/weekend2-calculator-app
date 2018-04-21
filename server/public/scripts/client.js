@@ -8,6 +8,7 @@ function onReady() {
     $('#subtractButton').click(subtractNumbers);
     $('#multiplyButton').click(multiplyNumbers);
     $('#divideButton').click(divideNumbers);
+    updateHistoryDom();
 }
 
 function addNumbers() {
@@ -41,5 +42,41 @@ function sendCalculation (type) {
     })
         .then(function(response) {
             console.log(response);
+            updateHistoryDom();
         });
+}
+
+function updateHistoryDom() {
+    $.ajax({
+        method: 'GET',
+        url: '/history'
+    })
+        .then(function(response) {
+            $('#calcHistoryTable').empty();
+            response.forEach(function (calculation) {
+                prependTableRow(calculation);
+            });
+        });
+}
+
+function prependTableRow(object) {
+    let operator = object.type;
+    if (operator == 'add') {
+        operator = '+';
+    }
+    else if (operator == 'subtract') {
+        operator = '-';
+    }
+    else if (operator == 'multiply') {
+        operator = '&times;';
+    }
+    else if (operator == 'divide') {
+        operator = '&divide;'
+    }
+    $('#calcHistoryTable').prepend(`<tr>
+                                        <td>${object.x}</td>
+                                        <td>${operator}</td>
+                                        <td>${object.y}</td>
+                                        <td>${object.answer}</td>
+                                    </tr>`);
 }
