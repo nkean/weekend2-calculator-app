@@ -4,13 +4,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const calculate = require('./modules/calculate');
-calcHistory = [];
+let calcHistory = [];
 
 app.use(express.static('server/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/history', (req,res) => {
     res.send(calcHistory);
+});
+
+app.get('/reset-calc', (req,res) => {
+    calcHistory = [];
+    res.sendStatus(200);
 });
 
 app.post('/calculate', (req, res) => {

@@ -8,6 +8,7 @@ function onReady() {
     $('#subtractButton').click(subtractNumbers);
     $('#multiplyButton').click(multiplyNumbers);
     $('#divideButton').click(divideNumbers);
+    $('#clearButton').click(resetCalculator);
     updateHistoryDom();
 }
 
@@ -25,6 +26,16 @@ function multiplyNumbers() {
 
 function divideNumbers() {
     sendCalculation('divide');
+}
+
+function resetCalculator() {
+    $.ajax({
+        method: 'GET',
+        url: '/reset-calc'
+    })
+        .then(function(response){
+            updateHistoryDom();
+        });
 }
 
 function sendCalculation (type) {
